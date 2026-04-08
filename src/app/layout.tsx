@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import DataProvider from "@/components/DataProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -101,7 +102,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TooltipProvider>
-            {children}
+            <DataProvider>
+              {children}
+            </DataProvider>
           </TooltipProvider>
           <Toaster
             richColors

@@ -289,12 +289,12 @@ export default function AdminCategoriesPage() {
     [categories, productCounts]
   );
 
-  const handleSave = (data: Category) => {
+  const handleSave = async (data: Category) => {
     if (editingCategory) {
-      updateCategory(editingCategory.id, data);
+      await updateCategory(editingCategory.id, data);
       toast.success(`Đã cập nhật danh mục "${data.name}"`);
     } else {
-      const ok = addCategory(data);
+      const ok = await addCategory(data);
       if (!ok) {
         toast.error(`Danh mục "${data.name}" đã tồn tại!`);
         return;
@@ -305,7 +305,7 @@ export default function AdminCategoriesPage() {
     setEditingCategory(null);
   };
 
-  const handleDelete = (cat: Category) => {
+  const handleDelete = async (cat: Category) => {
     const count = productCounts[cat.slug] || 0;
     if (count > 0) {
       toast.error(
@@ -314,7 +314,7 @@ export default function AdminCategoriesPage() {
       setDeleteConfirm(null);
       return;
     }
-    deleteCategory(cat.id);
+    await deleteCategory(cat.id);
     setDeleteConfirm(null);
     toast.success(`Đã xóa danh mục "${cat.name}"`);
   };

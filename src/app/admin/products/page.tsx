@@ -933,12 +933,12 @@ export default function AdminProductsPage() {
     }
   };
 
-  const handleSave = (data: Product) => {
+  const handleSave = async (data: Product) => {
     if (editingProduct) {
-      updateProduct(editingProduct.id, data);
+      await updateProduct(editingProduct.id, data);
       toast.success(`Đã cập nhật "${data.title}"`);
     } else {
-      const ok = addProduct(data);
+      const ok = await addProduct(data);
       if (!ok) {
         toast.error("Sản phẩm đã tồn tại!");
         return;
@@ -949,8 +949,8 @@ export default function AdminProductsPage() {
     setEditingProduct(null);
   };
 
-  const handleDelete = (product: Product) => {
-    deleteProduct(product.id);
+  const handleDelete = async (product: Product) => {
+    await deleteProduct(product.id);
     setDeleteConfirm(null);
     toast.success(`Đã xóa "${product.title}"`);
   };
@@ -1165,7 +1165,7 @@ export default function AdminProductsPage() {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="gap-2 text-base cursor-pointer"
-                            onClick={() => toggleStatus(product.id)}
+                            onClick={() => { toggleStatus(product.id); }}
                           >
                             {product.status === "ACTIVE" ? (
                               <><ToggleLeft className="h-3.5 w-3.5" /> Ẩn sản phẩm</>
