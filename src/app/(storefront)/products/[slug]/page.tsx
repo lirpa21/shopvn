@@ -26,6 +26,7 @@ import ProductCard from "@/components/storefront/ProductCard";
 import ProductReviews from "@/components/storefront/ProductReviews";
 import ProductVariantSelector from "@/components/storefront/ProductVariantSelector";
 import { useCartStore } from "@/stores/cart-store";
+import { useWishlistStore } from "@/stores/wishlist-store";
 import { useProductManagement } from "@/stores/product-store";
 import { formatPrice, calcDiscount } from "@/lib/format";
 
@@ -41,6 +42,8 @@ export default function ProductDetailPage({
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
+  const toggleWishlist = useWishlistStore((s) => s.toggleItem);
+  const isInWishlist = useWishlistStore((s) => s.isInWishlist(product?.id ?? ""));
 
   // Variant state
   const hasVariants = Boolean(product && product.variantOptions?.length);
@@ -366,10 +369,18 @@ export default function ProductDetailPage({
               <Button
                 size="lg"
                 variant="outline"
-                className="w-12 h-12 rounded-xl shrink-0"
-                onClick={() => toast.success("Đã thêm vào yêu thích!")}
+                className={`w-12 h-12 rounded-xl shrink-0 ${isInWishlist ? "bg-accent/10 border-accent text-accent" : ""}`}
+                onClick={() => {
+                  if (product) {
+                    toggleWishlist(product.id);
+                    toast.success(
+                      isInWishlist ? "Đã xóa khỏi yêu thích" : "Đã thêm vào yêu thích!",
+                      { description: product.title }
+                    );
+                  }
+                }}
               >
-                <Heart className="h-5 w-5" />
+                <Heart className={`h-5 w-5 ${isInWishlist ? "fill-current" : ""}`} />
               </Button>
               <Button
                 size="lg"

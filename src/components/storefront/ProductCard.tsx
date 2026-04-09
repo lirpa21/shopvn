@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cart-store";
+import { useWishlistStore } from "@/stores/wishlist-store";
 import { formatPrice, calcDiscount } from "@/lib/format";
 import type { Product } from "@/lib/mock-data";
 
@@ -21,6 +22,8 @@ interface ProductCardProps {
 function ProductCard({ product, index = 0 }: ProductCardProps) {
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
+  const toggleWishlist = useWishlistStore((s) => s.toggleItem);
+  const isInWishlist = useWishlistStore((s) => s.isInWishlist(product.id));
 
   const discount = product.comparePrice
     ? calcDiscount(product.price, product.comparePrice)
@@ -83,11 +86,19 @@ function ProductCard({ product, index = 0 }: ProductCardProps) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                toast.success("Đã thêm vào yêu thích!");
+                toggleWishlist(product.id);
+                toast.success(
+                  isInWishlist ? "Đã xóa khỏi yêu thích" : "Đã thêm vào yêu thích!",
+                  { description: product.title }
+                );
               }}
-              className="h-9 w-9 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white hover:text-accent transition-colors shadow-sm"
+              className={`h-9 w-9 rounded-full backdrop-blur flex items-center justify-center transition-colors shadow-sm ${
+                isInWishlist
+                  ? "bg-accent text-white hover:bg-accent/90"
+                  : "bg-white/90 hover:bg-white hover:text-accent"
+              }`}
             >
-              <Heart className="h-4 w-4" />
+              <Heart className={`h-4 w-4 ${isInWishlist ? "fill-current" : ""}`} />
             </button>
           </div>
 
