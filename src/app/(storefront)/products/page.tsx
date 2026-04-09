@@ -89,7 +89,7 @@ export default function ProductsPage() {
     }
 
     return filtered;
-  }, [sort, selectedCategories, selectedPriceRange]);
+  }, [allProducts, sort, selectedCategories, selectedPriceRange]);
 
   const activeFilters =
     selectedCategories.length + (selectedPriceRange !== null ? 1 : 0);
